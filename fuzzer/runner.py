@@ -8,11 +8,6 @@
 
 import subprocess
 
-#TODO: state
-#TODO: init
-#TODO: subprocess
-#TODO: run
-#TODO: log
 
 STATES = ["waiting", "running", "finished"]
 
@@ -38,24 +33,31 @@ class Runner:
                                         check=True, #exception if non-0 exit
                                         timeout=self.time
                                         )
-        except subprocess.CalledProcessError:
+                                        
+        except subprocess.CalledProcessError as e:
             #ohjelma poistuu ei-0
             pass
 
-        except subprocess.TimeoutExpire:
+        except subprocess.TimeoutExpire as e:
             #timeout
             pass
 
-        except subprocess.SubprocessError:
+        except subprocess.SubprocessError as e:
             #fallback muille subprocessin omille exceptioneille
             pass
 
-        except:
+        except Exception as e:
             #muut virheet
 
         finally:
+            pass
             #mitässit
 
     self._state = STATES[0]
     self.args = []
     self.time = 0
+    self.log = []
+
+
+
+1
