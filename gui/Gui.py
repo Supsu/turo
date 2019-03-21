@@ -29,38 +29,40 @@ class Gui:
 		self.main_layout = QVBoxLayout()
 		self.main_widget.setLayout(self.main_layout)
 
-		# Creating the input widget ########################33
+		# Creating the input widget ########################
+		# variables related to program input gui features start with "pr"
+		# and variables related to test input begin with "ti"
 		self.input_widget = QWidget()
-		self.program_line_edit = QLineEdit()
-		self.test_input_line_edit = QLineEdit()
-		self.program_label = QLabel("Program path")
-		self.test_input_label = QLabel("Input path")
+		self.pr_path = QLineEdit()
+		self.ti_path = QLineEdit()
+		self.pr_label = QLabel("Program path")
+		self.ti_label = QLabel("Input path")
 		
 		# browse program path button
-		self.program_path_widget = QWidget()
-		self.program_path_button = QPushButton("Browse")
-		self.program_path_spacer = QSpacerItem(300, 0)
-		self.program_path_layout = QHBoxLayout()
-		self.program_path_layout.addWidget(self.program_path_button)
-		self.program_path_layout.addSpacerItem(self.program_path_spacer)
-		self.program_path_widget.setLayout(self.program_path_layout)
+		self.pr_browse_widget = QWidget()
+		self.pr_browse_button = QPushButton("Browse")
+		self.pr_browse_spacer = QSpacerItem(300, 0)
+		self.pr_browse_layout = QHBoxLayout()
+		self.pr_browse_layout.addWidget(self.pr_browse_button)
+		self.pr_browse_layout.addSpacerItem(self.pr_browse_spacer)
+		self.pr_browse_widget.setLayout(self.pr_browse_layout)
 
 		# browse input file path button
-		self.input_path_widget = QWidget()
-		self.input_path_button = QPushButton("Browse")
-		self.input_path_spacer = QSpacerItem(300, 0)
-		self.input_path_layout = QHBoxLayout()
-		self.input_path_layout.addWidget(self.input_path_button)
-		self.input_path_layout.addSpacerItem(self.input_path_spacer)
-		self.input_path_widget.setLayout(self.input_path_layout)
+		self.ti_browse_widget = QWidget()
+		self.ti_browse_button = QPushButton("Browse")
+		self.ti_browse_spacer = QSpacerItem(300, 0)
+		self.ti_browse_layout = QHBoxLayout()
+		self.ti_browse_layout.addWidget(self.ti_browse_button)
+		self.ti_browse_layout.addSpacerItem(self.ti_browse_spacer)
+		self.ti_browse_widget.setLayout(self.ti_browse_layout)
 
 		self.input_layout = QGridLayout()
-		self.input_layout.addWidget(self.program_label, 0, 0)
-		self.input_layout.addWidget(self.program_line_edit, 1, 0)
-		self.input_layout.addWidget(self.program_path_widget, 2, 0)
-		self.input_layout.addWidget(self.test_input_label, 0, 1)
-		self.input_layout.addWidget(self.test_input_line_edit, 1, 1)
-		self.input_layout.addWidget(self.input_path_widget, 2, 1)
+		self.input_layout.addWidget(self.pr_label, 0, 0)
+		self.input_layout.addWidget(self.pr_path, 1, 0)
+		self.input_layout.addWidget(self.pr_browse_widget, 2, 0)
+		self.input_layout.addWidget(self.ti_label, 0, 1)
+		self.input_layout.addWidget(self.ti_path, 1, 1)
+		self.input_layout.addWidget(self.ti_browse_widget, 2, 1)
 		self.input_widget.setLayout(self.input_layout)
 
 		# Main widget spacer
@@ -75,10 +77,26 @@ class Gui:
 		self.main_window.show()
 		self.app.exec_()
 
+	"""
+	Creates a file dialog at the current working directory and 
+	returns the path to the file that was selected by the user. Returns an 
+	empty string if no file chosen.
+	"""
 	def create_file_browser(self):
 		self.cwd = os.getcwd()
 		self.file_dialog = QFileDialog()
+		self.file_dialog.setFileMode(0) # set to AnyFile
 
+
+	def browse_for_program(self):
+		chosen_file = create_file_browser()
+		if len(chosen_file) != 0:
+			self.program_path_edit.setText(chosen_file)
+
+	def browse_for_input_file(self):
+		chosen_file = create_file_browser()
+		if len(chosen_file) != 0:
+			self.test_input_path_edit.setText(chosen_file)
 
 
 if __name__ == "__main__":
