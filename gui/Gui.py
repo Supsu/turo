@@ -191,6 +191,17 @@ class Gui:
 
 		self.status_log.append(eventstring)
 
+	"""
+		Sets current progress bar value to the given value.
+		Maximum is determined by the iterations set at the start of the run.
+	"""
+	def set_progress(self, value):
+		try:
+			v = int(value)
+		except:
+			v = self.status_progress.value()
+			
+		self.status_progress.setValue(v)
 
 if __name__ == "__main__":
 	a = Gui()
