@@ -1,5 +1,7 @@
 import os
 
+from dataclasses import dataclass
+from datetime import datetime
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget
 from PyQt5.QtWidgets import QLineEdit, QLabel, QSpacerItem, QPushButton, QTextEdit, QProgressBar
 from PyQt5.QtWidgets import QGridLayout, QVBoxLayout, QHBoxLayout
@@ -7,14 +9,22 @@ from PyQt5.QtWidgets import QFileDialog
 from PyQt5.QtCore import Qt
 
 """
-
+	Config dataclass
+	Contains all the config data sent from the GUI to the actual
+	functional parts of the program
 """
+@dataclass
+class ConfigData:
+	iterations: int
+	verbose: bool
+
 class Gui:	
 
 	def __init__(self):
 		self.app = None
 		self.main_window = None
-		
+
+		self.config_data = ConfigData(10, True)
 
 	"""
 	Creates a new main window and opens it
@@ -155,7 +165,7 @@ class Gui:
 			self.ti_path.setText(self.chosen_file)
 
 	def run(self):
-		print("Run")
+		self.log_event(123123123,"Run")
 
 	def stop(self):
 		print("Stop")
@@ -165,6 +175,22 @@ class Gui:
 
 	def exit(self):
 		exit()
+
+	"""
+		Logs an event into the gui log. Timestamp taken in as unix timestamp
+		as an integer, event as a string.
+	"""
+	def log_event(self, timestamp, event):
+		try:
+			ts = int(timestamp)
+		except:
+			ts = 0
+
+		eventstring = "[" + datetime.utcfromtimestamp(ts).strftime('%H:%M:%S') + "]: "
+		eventstring += str(event)
+
+		self.status_log.append(eventstring)
+
 
 if __name__ == "__main__":
 	a = Gui()
