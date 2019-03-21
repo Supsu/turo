@@ -74,6 +74,10 @@ class Gui:
 
 		self.main_window.setCentralWidget(self.main_widget)
 
+		# Connect all the buttons to their functions
+		self.pr_browse_button.clicked.connect(self.browse_for_program)
+		self.ti_browse_button.clicked.connect(self.browse_for_input_file)
+
 		self.main_window.show()
 		self.app.exec_()
 
@@ -86,17 +90,19 @@ class Gui:
 		self.cwd = os.getcwd()
 		self.file_dialog = QFileDialog()
 		self.file_dialog.setFileMode(0) # set to AnyFile
-
+		options = QFileDialog.Options()
+		result = QFileDialog.getOpenFileName(self.main_window, "QFileDialog.getOpenFileName()", self.cwd, "", options=options)
+		return result[0]
 
 	def browse_for_program(self):
-		chosen_file = create_file_browser()
-		if len(chosen_file) != 0:
-			self.program_path_edit.setText(chosen_file)
+		self.chosen_file = self.create_file_browser()
+		if len(self.chosen_file) != 0:
+			self.pr_path.setText(self.chosen_file)
 
 	def browse_for_input_file(self):
-		chosen_file = create_file_browser()
-		if len(chosen_file) != 0:
-			self.test_input_path_edit.setText(chosen_file)
+		self.chosen_file = self.create_file_browser()
+		if len(self.chosen_file) != 0:
+			self.ti_path.setText(self.chosen_file)
 
 
 if __name__ == "__main__":
