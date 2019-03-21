@@ -3,6 +3,7 @@ import os
 import copy
 from dataclasses import dataclass
 from datetime import datetime
+import time
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget
 from PyQt5.QtWidgets import QLineEdit, QLabel, QSpacerItem, QPushButton, QTextEdit, QProgressBar, QSpinBox, QCheckBox
 from PyQt5.QtWidgets import QGridLayout, QVBoxLayout, QHBoxLayout
@@ -153,7 +154,7 @@ class Gui:
 		file_dialog = QFileDialog()
 		file_dialog.setFileMode(0) # set to AnyFile
 		options = QFileDialog.Options()
-		result = QFileDialog.getOpenFileName(self.main_window, "QFileDialog.getOpenFileName()", self.cwd, "", options=options)
+		result = QFileDialog.getOpenFileName(self.main_window, "QFileDialog.getOpenFileName()", cwd, "", options=options)
 		return result[0]
 
 	def create_config_dialog(self):
@@ -235,12 +236,12 @@ class Gui:
 
 	# Starts the fuzzer with the current config settings
 	def run(self):
-		print("Run")
+		self.log_event(self.current_timestamp(), "Run is not implemented yet")
 		# TODO: Create fuzzer and boot it up
 
 	# Stops the fuzzer
 	def stop(self):
-		print("Stop")
+		self.log_event(self.current_timestamp(), "Stop is not implemented yet")
 		# TODO: all of it
 
 	# Opens the config dialog
@@ -249,7 +250,33 @@ class Gui:
 
 	# Quits the program
 	def exit(self):
-		exit()
+		exit_dialog = QDialog()
+		exit_dialog.setWindowTitle("Confirm exit")
+
+		exit_label = QLabel("Confirm exit")
+		exit_label.setAlignment(Qt.AlignHCenter)
+		exit_button_ok = QPushButton("Yes")
+		exit_button_no = QPushButton("No")
+		exit_button_widget = QWidget()
+
+		exit_layout = QVBoxLayout()
+		exit_button_layout = QHBoxLayout()
+		exit_layout.addWidget(exit_label)
+
+		exit_button_layout.addWidget(exit_button_ok)
+		exit_button_layout.addWidget(exit_button_no)
+		exit_button_widget.setLayout(exit_button_layout)
+		exit_layout.addWidget(exit_button_widget)
+
+		exit_button_ok.clicked.connect(exit_dialog.accept)
+		exit_button_no.clicked.connect(exit_dialog.reject)
+
+		exit_dialog.setLayout(exit_layout)
+
+		exit_dialog.exec()
+
+		if exit_dialog.result() == QDialog.Accepted:
+			exit()
 		# TODO: Go a graceful exit where the fuzzer doesn't just immediately
 		#       explode. Preferably with no core dumps or anything.
 
@@ -263,7 +290,7 @@ class Gui:
 		except:
 			ts = 0
 
-		eventstring = "[" + datetime.utcfromtimestamp(ts).strftime('%H:%M:%S') + "]: "
+		eventstring = "[" + datetime.fromtimestamp(ts).strftime('%H:%M:%S') + "]: "
 		eventstring += str(event)
 
 		self.status_log.append(eventstring)
@@ -279,6 +306,13 @@ class Gui:
 			v = self.status_progress.value()
 			
 		self.status_progress.setValue(v)
+
+	"""
+		Gets current unix timestamp
+	"""
+	def current_timestamp(self):
+		dt = datetime.now()
+		return int(time.mktime(dt.timetuple()))
 
 if __name__ == "__main__":
 	a = Gui()
