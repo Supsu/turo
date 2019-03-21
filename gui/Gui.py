@@ -1,11 +1,12 @@
 import os
 
+import copy
 from dataclasses import dataclass
 from datetime import datetime
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget
-from PyQt5.QtWidgets import QLineEdit, QLabel, QSpacerItem, QPushButton, QTextEdit, QProgressBar
+from PyQt5.QtWidgets import QLineEdit, QLabel, QSpacerItem, QPushButton, QTextEdit, QProgressBar, QSpinBox, QCheckBox
 from PyQt5.QtWidgets import QGridLayout, QVBoxLayout, QHBoxLayout
-from PyQt5.QtWidgets import QFileDialog
+from PyQt5.QtWidgets import QFileDialog, QDialog
 from PyQt5.QtCore import Qt
 
 """
@@ -106,6 +107,7 @@ class Gui:
 		self.input_layout.addWidget(self.ti_browse_widget, 2, 1)
 		self.input_widget.setLayout(self.input_layout)
 
+	# Creates the bottom part of the GUI
 	def create_status_widget(self):
 		self.status_widget = QWidget()
 		self.status_buttons = QWidget()
@@ -147,34 +149,109 @@ class Gui:
 	empty string if no file chosen.
 	"""
 	def create_file_browser(self):
-		self.cwd = os.getcwd()
-		self.file_dialog = QFileDialog()
-		self.file_dialog.setFileMode(0) # set to AnyFile
+		cwd = os.getcwd()
+		file_dialog = QFileDialog()
+		file_dialog.setFileMode(0) # set to AnyFile
 		options = QFileDialog.Options()
 		result = QFileDialog.getOpenFileName(self.main_window, "QFileDialog.getOpenFileName()", self.cwd, "", options=options)
 		return result[0]
 
+	def create_config_dialog(self):
+		conf_dialog = QDialog()
+		conf_dialog.setWindowTitle("Configuration")
+		conf_dialog.setWindowModality(Qt.ApplicationModal)
+		config_data_tmp = copy.deepcopy(self.config_data)
+
+		it_widget = QWidget()
+		it_label = QLabel("Iterations")
+		it_spinbox = QSpinBox()
+		it_spinbox.setMinimum(0)
+		it_spinbox.setMaximum(1000000)
+		it_spinbox.setValue(config_data_tmp.iterations)
+
+		verb_widget = QWidget()
+		#verb_label = QLabel("Verbose")
+		verb_checkbox = QCheckBox("Verbose")
+		verb_checkbox.setTristate(False)
+		verb_checkbox.setChecked(config_data_tmp.verbose)
+
+		config_button_widget = QWidget()
+		config_button_accept = QPushButton("Accept")
+		config_button_decline = QPushButton("Decline")
+
+		config_layout = QVBoxLayout()
+		config_it_layout = QHBoxLayout()
+		config_verb_layout = QHBoxLayout()
+		config_button_layout = QHBoxLayout()
+
+		config_it_layout.addWidget(it_spinbox)
+		config_it_layout.addWidget(it_label)
+		it_widget.setLayout(config_it_layout)
+
+		config_verb_layout.addWidget(verb_checkbox)
+		verb_widget.setLayout(config_verb_layout)
+
+		config_button_layout.addWidget(config_button_accept)
+		config_button_layout.addWidget(config_button_decline)
+		config_button_widget.setLayout(config_button_layout)
+
+		config_layout.addWidget(it_widget)
+		config_layout.addWidget(verb_widget)
+		config_layout.addWidget(config_button_widget)
+
+		conf_dialog.setLayout(config_layout)
+
+		config_button_accept.clicked.connect(conf_dialog.accept)
+		config_button_decline.clicked.connect(conf_dialog.reject)
+
+		it_spinbox.valueChanged.connect(self.config_iterations_value_change)
+		verb_checkbox.stateChanged.connect(self.config_verbose_value_change)
+
+		conf_dialog.exec()
+
+		if conf_dialog.result() != QDialog.Accepted:
+			self.config_data = copy.deepcopy(config_data_tmp)
+
+	def config_iterations_value_change(self, value):
+		self.config_data.iterations = value
+
+	def config_verbose_value_change(self, value):
+		if value == Qt.Checked:
+			self.config_data.verbose = True
+		else:
+			self.config_data.verbose = False
+
+	# Slot for program browse button
 	def browse_for_program(self):
-		self.chosen_file = self.create_file_browser()
-		if len(self.chosen_file) != 0:
-			self.pr_path.setText(self.chosen_file)
+		chosen_file = self.create_file_browser()
+		if len(chosen_file) != 0:
+			self.pr_path.setText(chosen_file)
 
+	# Slot for input browse button
 	def browse_for_input_file(self):
-		self.chosen_file = self.create_file_browser()
-		if len(self.chosen_file) != 0:
-			self.ti_path.setText(self.chosen_file)
+		chosen_file = self.create_file_browser()
+		if len(chosen_file) != 0:
+			self.ti_path.setText(chosen_file)
 
+	# Starts the fuzzer with the current config settings
 	def run(self):
-		self.log_event(123123123,"Run")
+		print("Run")
+		# TODO: Create fuzzer and boot it up
 
+	# Stops the fuzzer
 	def stop(self):
 		print("Stop")
+		# TODO: all of it
 
+	# Opens the config dialog
 	def config(self):
-		print("Config")
+		self.create_config_dialog()
 
+	# Quits the program
 	def exit(self):
 		exit()
+		# TODO: Go a graceful exit where the fuzzer doesn't just immediately
+		#       explode. Preferably with no core dumps or anything.
 
 	"""
 		Logs an event into the gui log. Timestamp taken in as unix timestamp
