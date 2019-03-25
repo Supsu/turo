@@ -33,7 +33,7 @@ class Runner:
                                         check=True, #exception if non-0 exit
                                         timeout=self.time
                                         )
-                                        
+
         except subprocess.CalledProcessError as e:
             #ohjelma poistuu ei-0
             pass
@@ -60,4 +60,4 @@ class Runner:
 
 
 
-1
+
