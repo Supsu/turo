@@ -1,6 +1,6 @@
 #import asyncio TODO: event loop in here or operation handler?
 import shlex
-from ..fuzzer.operationhandler import OperationHandler
+from fuzzer.operationhandler import OperationHandler
 
 class Controller:
 
@@ -16,13 +16,10 @@ class Controller:
 		# Run shlex for args
 		# TODO: Check this later
 		self.passed_args = shlex.split(self.args)
-		self.operationhandler = OperationHandler(self.input_path, program_path, self.passed_args
+		self
+		self.operationhandler = OperationHandler(input_path, program_path)
 
 		self.operationhandler.run()
 
-
-
-
-
 if __name__ == "__main__":
-	a = Controller()
+	a = Controller("123")
