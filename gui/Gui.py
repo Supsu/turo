@@ -192,6 +192,7 @@ class Gui:
 		config_it_layout = QHBoxLayout()
 		config_verb_layout = QHBoxLayout()
 		config_tim_layout = QHBoxLayout()
+
 		config_button_layout = QHBoxLayout()
 
 		config_it_layout.addWidget(it_spinbox)
@@ -212,6 +213,7 @@ class Gui:
 		config_layout.addWidget(it_widget)
 		config_layout.addWidget(verb_widget)
 		config_layout.addWidget(tim_widget)
+
 		config_layout.addWidget(config_button_widget)
 
 		conf_dialog.setLayout(config_layout)
