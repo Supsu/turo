@@ -1,15 +1,20 @@
 import asyncio
+from ..fuzzer.operationhandler import OperationHandler
 
 class Controller:
 
 	def __init__(self):
-		self.input_file = ""
-		self.program_file = ""
-		self.config = None # TODO: import ConfigData from gui
+		self.operationhandler = None
 
-	def set_input_file(self, filename):
-		self.input_file = filename
-		
+	# TODO: Sanitation needed for filepaths?
+	#       It comes from Qt's widget so one would think that that sanitizes it...
+	def run(self, input_path, program_path, config_data):
+		self.config = config_data
+
+		self.operationhandler = OperationHandler(self.input_path, program_path)
+
+
+
 
 
 
