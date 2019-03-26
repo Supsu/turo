@@ -1,31 +1,28 @@
-####################################
-# Runner module for turo
-#
-# This module is used for single iteration of the software.
-# It keeps track of state of the run and in the end of iteration
-# passes loggable information to logger module.
-####################################
-
 import subprocess
 
-
-STATES = ["waiting", "running", "finished"]
-
 """
-kommentoi tähä homo
+Runner class to handle subprocesses
+
+Runner objects are designed to run the tested program one time,
+capture the possible error and log it. To use the class,
+create a Runner object with init parameters that contain
+at least args[]. The first arg is supposed to be the path
+to testable program.
 """
 class Runner:
-    def __init__(self):
-        # puske ohjelman exec arg0
-        # argumentit arg1-n
-        # timeout?
-        pass
+    def __init__(self, args, time=1000):
+        self.args = args
+        self.time = time
+        self.log = []
 
-    def logger(self):
-        # työnnä sata loggerille
-        pass
+    def log(self):
+        if size(self.log)==0:
+            return 0
+        else:
+            #TODO: send log to logger (qt signal?)
+            return 1
 
-    def subproc(self):
+    def run(self):
         # suorita aliprosessi
         try:
             completed = subprocess.run( self.args, #pass arguments
@@ -35,29 +32,17 @@ class Runner:
                                         )
 
         except subprocess.CalledProcessError as e:
-            #ohjelma poistuu ei-0
-            pass
+            self.log.append("[NON-0]: " + str(e))
 
         except subprocess.TimeoutExpire as e:
-            #timeout
-            pass
+            self.log.append("[TO]: " + str(e))
 
         except subprocess.SubprocessError as e:
-            #fallback muille subprocessin omille exceptioneille
-            pass
+            self.log.append("[SUB]: " + str(e))
 
         except Exception as e:
-            #muut virheet
+            self.log.append("[OTHER]: " + str(e))
 
         finally:
-            pass
-            #mitässit
-
-    self._state = STATES[0]
-    self.args = []
-    self.time = 0
-    self.log = []
-
-
-
-
+            self.logstate = self.log()
+            return self.logstate
