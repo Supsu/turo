@@ -19,6 +19,7 @@ from PyQt5.QtCore import Qt
 class ConfigData:
 	iterations: int
 	verbose: bool
+	timeout: int
 
 class Gui:	
 
@@ -26,7 +27,7 @@ class Gui:
 		self.app = None
 		self.main_window = None
 
-		self.config_data = ConfigData(10, True)
+		self.config_data = ConfigData(10, True, 1000)
 
 	"""
 	Creates a new main window and opens it
@@ -176,6 +177,13 @@ class Gui:
 		verb_checkbox.setTristate(False)
 		verb_checkbox.setChecked(config_data_tmp.verbose)
 
+		tim_widget = QWidget()
+		tim_label = QLabel("Timeout (ms)")
+		tim_spinbox = QSpinBox()
+		tim_spinbox.setMinimum(0)
+		tim_spinbox.setMaximum(36000000)
+		tim_spinbox.setValue(1000)
+
 		config_button_widget = QWidget()
 		config_button_accept = QPushButton("Accept")
 		config_button_decline = QPushButton("Decline")
@@ -183,6 +191,7 @@ class Gui:
 		config_layout = QVBoxLayout()
 		config_it_layout = QHBoxLayout()
 		config_verb_layout = QHBoxLayout()
+		config_tim_layout = QHBoxLayout()
 		config_button_layout = QHBoxLayout()
 
 		config_it_layout.addWidget(it_spinbox)
@@ -192,12 +201,17 @@ class Gui:
 		config_verb_layout.addWidget(verb_checkbox)
 		verb_widget.setLayout(config_verb_layout)
 
+		config_tim_layout.addWidget(tim_spinbox)
+		config_tim_layout.addWidget(tim_label)
+		tim_widget.setLayout(config_tim_layout)
+
 		config_button_layout.addWidget(config_button_accept)
 		config_button_layout.addWidget(config_button_decline)
 		config_button_widget.setLayout(config_button_layout)
 
 		config_layout.addWidget(it_widget)
 		config_layout.addWidget(verb_widget)
+		config_layout.addWidget(tim_widget)
 		config_layout.addWidget(config_button_widget)
 
 		conf_dialog.setLayout(config_layout)
