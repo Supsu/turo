@@ -4,6 +4,8 @@ Runner module to define Runner class for subprocess handling.
 
 import subprocess
 
+debug = False
+
 class Runner:
     """Runner class to handle subprocesses
 
@@ -87,5 +89,13 @@ class Runner:
             self.log.append("[OTHER]: " + str(e))
 
         finally:
+            if debug == True:
+                print(self.log)
             self.logstate = self.log()
             return self.logstate
+
+#If runned as main for testing purposes
+if __name__ == "__main__":
+    debug = True
+    testargs = ["./test", "arg1", "arg2"]
+    testrunner = Runner(testargs)
