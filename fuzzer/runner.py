@@ -30,7 +30,7 @@ class Runner:
         self.time = time
         self.log = []
 
-    def log(self):
+    def logger(self):
         """Log method to handle sending logs upwards
 
         Log method is used to send the Runner objects internal
@@ -43,7 +43,7 @@ class Runner:
             int: If the log was empty, return 0. Otherwise, return 1
 
         """
-        if size(self.log)==0:
+        if len(self.log)==0:
             return 0
         else:
             #TODO: send log to logger (qt signal?)
@@ -79,7 +79,7 @@ class Runner:
         except subprocess.CalledProcessError as e:
             self.log.append("[NON-0]: " + str(e))
 
-        except subprocess.TimeoutExpire as e:
+        except subprocess.TimeoutExpired as e:
             self.log.append("[TO]: " + str(e))
 
         except subprocess.SubprocessError as e:
@@ -91,7 +91,7 @@ class Runner:
         finally:
             if debug == True:
                 print(self.log)
-            self.logstate = self.log()
+            self.logstate = self.logger()
             return self.logstate
 
 #If runned as main for testing purposes
