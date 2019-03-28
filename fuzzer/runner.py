@@ -29,6 +29,7 @@ class Runner:
         self.args = args
         self.time = time
         self.log = []
+        self.completed = ""
 
     def logger(self):
         """Log method to handle sending logs upwards
@@ -70,7 +71,7 @@ class Runner:
 
         """
         try:
-            completed = subprocess.run( self.args, #pass arguments
+            self.completed = subprocess.run( self.args, #pass arguments
                                         capture_output=True, #get output
                                         check=True, #exception if non-0 exit
                                         timeout=self.time
@@ -91,10 +92,15 @@ class Runner:
         finally:
             if DEBUG:
                 print(self.log)
+                print(str(self.completed.args))
             return self.logger()
 
 #If runned as main for testing purposes
 if __name__ == "__main__":
+    print("Running runner module testing..")
     DEBUG = True
-    TESTARGS = ["./test", "arg1", "arg2"]
-    TESTRUNNER = Runner(TESTARGS)
+    #TODO: insert dummy testing software when available
+    TESTARGS = ["test", "arg1", "arg2"]
+    TESTTIME = 1000
+    TESTRUNNER = Runner(TESTARGS, TESTTIME)
+    TESTRUNNER.run()
