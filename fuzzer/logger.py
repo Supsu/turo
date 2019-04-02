@@ -2,6 +2,11 @@ from PyQt5.QtCore import pyqtSignal, pyqtSlot, QObject
 from datetime import datetime
 import time
 
+"""
+Logs events into a file given in the init and emits an event_logged(int,str) signal to inform
+the GUI to print a log message on the GUI window. Incoming log events should be tossed to the log_event()
+function.
+"""
 class Logger(QObject):
 
     event_logged = pyqtSignal(int, str)
@@ -43,6 +48,9 @@ class Logger(QObject):
         if priority or self.verbose:
             self.event_logged.emit(epoch, event)
 
+    """
+    Test slot for debugging.
+    """
     def test_slot(self, ts, event):
         print("[" + datetime.fromtimestamp(ts).strftime('%H:%M:%S') + "]: " + event)
 
