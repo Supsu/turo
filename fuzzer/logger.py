@@ -2,8 +2,9 @@ from PyQt5.QtCore import pyqtSignal, pyqtSlot, QObject
 from datetime import datetime
 import time
 
-class Logger:
+class Logger(QObject):
 
+    event_logged = pyqtSignal(int, str)
     """
     program_name is the name of the program being run. The logger bases the log file name on that.
     verbose is a Bool value that controls the flood of log info into the GUI. Everything is logged 
@@ -12,9 +13,9 @@ class Logger:
     event_logged is the signal that is emitted and it sends the timestamp as int and event as str
     """
     def __init__(self, program_name, verbose):
+        super(Logger, self).__init__()
         self.verbose = verbose
         self.filename = str(program_name) + ".log"
-        self.event_logged = pyqtSignal(int, str)
 
     """
     Takes the log event in as event and pushes it into the log file. If priority is True then it'll also emit a signal of the 
@@ -40,4 +41,12 @@ class Logger:
 
         # send signal of the message being logged
         if priority or self.verbose:
-            self.event_logged(epoch, event)
+            self.event_logged.emit(epoch, event)
+
+    def test_slot(self, ts, event):
+        print("[" + datetime.fromtimestamp(ts).strftime('%H:%M:%S') + "]: " + event)
+
+if __name__ == "__main__":
+    a = Logger("test", True)
+    a.event_logged.connect(a.test_slot)
+    a.log_event("Stuff happened\n", True)
