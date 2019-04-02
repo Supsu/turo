@@ -3,10 +3,12 @@ Runner module to define Runner class for subprocess handling.
 """
 
 import subprocess
+from PyQt5.QtCore import QObject, pyqtSignal
 
 DEBUG = False
 
-class Runner:
+class Runner(QObject):
+    log_event = pyqtSignal(str) # Can be used to send log events with log_event.emit("event here")
     """Runner class to handle subprocesses
 
     Runner objects are designed to run the tested program one time,
@@ -26,6 +28,7 @@ class Runner:
 
     """
     def __init__(self, args, time=1000):
+        super(Runner, self).__init__()
         self.args = args
         self.time = time
         self.log = []
