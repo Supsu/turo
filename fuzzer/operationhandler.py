@@ -18,7 +18,8 @@ class OperationHandler(threading.Thread, QObject):
     event_logged = pyqtSignal(int, str)
 
     def __init__(self, input_file, program_path, **kwargs):
-        super().__init__()
+        threading.Thread.__init__(self)
+        QObject.__init__(self)
         self._input_file = input_file
         self._program_path = program_path
 
@@ -40,7 +41,6 @@ class OperationHandler(threading.Thread, QObject):
         self.logger.event_logged.connect(self.event_slot)
         self.logger.log_event("This is a test event...", True)
 
-
     def run(self):
         """This function is the main function in the thread"""
 
@@ -53,4 +53,4 @@ class OperationHandler(threading.Thread, QObject):
         self.event_logged.emit(ts, event)
 
 if __name__ == "__main__":
-    a = OperationHandler("", "")
+    a = OperationHandler("test/inputfile.py", "test/program.py")
