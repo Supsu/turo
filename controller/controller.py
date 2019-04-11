@@ -1,7 +1,7 @@
 import shlex
 from PyQt5.QtCore import QObject, pyqtSignal, pyqtSlot
 from ..fuzzer.operationhandler import OperationHandler
-# TODO: import ConfigData
+from ..gui.Gui import ConfigData
 
 """
 Controller for the program. Creates OperationHandler and receives the config from GUI.
@@ -27,7 +27,7 @@ class Controller(QObject):
 		# TODO: Check this later
 		self.passed_args = shlex.split(self.args)
 		
-		self.operationhandler = OperationHandler(input_path, program_path)
+		self.operationhandler = OperationHandler(input_path, program_path, verbose=config_data.verbose, timeout=config_data.timeout, iterations=config_data.iterations)
 
 		self.operationhandler.run()
 
