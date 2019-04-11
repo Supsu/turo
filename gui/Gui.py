@@ -9,6 +9,8 @@ from PyQt5.QtWidgets import QLineEdit, QLabel, QSpacerItem, QPushButton, QTextEd
 from PyQt5.QtWidgets import QGridLayout, QVBoxLayout, QHBoxLayout
 from PyQt5.QtWidgets import QFileDialog, QDialog
 from PyQt5.QtCore import Qt
+# TODO: Controller needs to be merged
+#from ..fuzzer.controller import controller
 
 """
     Config dataclass
@@ -21,9 +23,10 @@ class ConfigData:
     verbose: bool
     timeout: int
 
-class Gui:	
+class Gui(QObject):	
 
     def __init__(self):
+        super(Gui, self).__init__()
         self.app = None
         self.main_window = None
 
@@ -255,7 +258,17 @@ class Gui:
     # Starts the fuzzer with the current config settings
     def run(self):
         self.log_event(self.current_timestamp(), "Run is not implemented yet")
-        # TODO: Create fuzzer and boot it up
+        
+        input_file = self.ti_path.text()
+        program_file = self.pr_path.text()
+        config = self.config_data
+
+        if len(input_file) > 0 or len(program_file > 0):
+            self.log_event(self.current_timestamp(), "Starting fuzzer...")
+            # self.controller = Controller(inpupt_file, program_file, config)
+            # self.controller.log_event.connect(self.log_event)
+        else:
+            self.log_event(self.current_timestamp(), "Failed to start fuzzer: input or program file paths not set.")
 
     # Stops the fuzzer
     def stop(self):
