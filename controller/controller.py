@@ -32,6 +32,8 @@ class Controller(QObject):
 		event = "Starting up handler..."
 		self.log_event.emit(epoch, event)
 		self.operationhandler = OperationHandler(input_path, program_path, verbose=config_data.verbose, timeout=config_data.timeout, iterations=config_data.iterations)
+		# TODO: Remove comment when branches have been merged
+		# self.operationhandler.event_logged.connect(self.log_received)
 
 		self.operationhandler.run()
 
