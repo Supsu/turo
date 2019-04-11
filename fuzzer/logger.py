@@ -37,7 +37,7 @@ class Logger(QObject):
         dt = datetime.now()
         epoch = int(time.mktime(dt.timetuple()))
 
-        eventstring = "[" + datetime.fromtimestamp(epoch).strftime('%H:%M:%S') + "]: " + event
+        eventstring = "[" + datetime.fromtimestamp(epoch).strftime('%H:%M:%S') + "]: " + event + "\n"
 
         # Write into the file
         f = open(self.filename, "a")
