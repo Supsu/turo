@@ -2,6 +2,8 @@ import shlex
 from PyQt5.QtCore import QObject, pyqtSignal, pyqtSlot
 from ..fuzzer.operationhandler import OperationHandler
 from ..gui.Gui import ConfigData
+from datetime import datetime
+import time
 
 """
 Controller for the program. Creates OperationHandler and receives the config from GUI.
@@ -17,7 +19,6 @@ class Controller(QObject):
 		super(Controller, self).__init__()
 		self.operationhandler = None
 		self.args = args
-		self.sendLogMessage = pyqtSignal(str)
 
 	# TODO: Sanitation needed for filepaths?
 	#       It comes from Qt's widget so one would think that that sanitizes it...
@@ -27,6 +28,9 @@ class Controller(QObject):
 		# TODO: Check this later
 		self.passed_args = shlex.split(self.args)
 		
+		epoch = current_timestamp()
+		event = "Starting up handler..."
+		self.log_event.emit(epoch, event)
 		self.operationhandler = OperationHandler(input_path, program_path, verbose=config_data.verbose, timeout=config_data.timeout, iterations=config_data.iterations)
 
 		self.operationhandler.run()
@@ -37,6 +41,11 @@ class Controller(QObject):
 	def log_received(self, ts, event):
 		self.log_event.emit(ts, event)
 
+def current_timestamp():
+	dt = datetime.now()
+	return int(time.mktime(dt.timetuple()))
+
 if __name__ == "__main__":
 	a = Controller("123")
-	a.run("", "", None)
+	c = ConfigData(10, True, 1000)
+	a.run("", "", c)
