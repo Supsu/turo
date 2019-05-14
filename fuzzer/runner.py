@@ -29,7 +29,7 @@ class Runner:
         self.args = args
         self.time = time
         self.log = []
-        self.completed = ""
+        self.completed = "No program was run!\n"
 
     def logger(self):
         """Log method to handle sending logs upwards
@@ -91,8 +91,15 @@ class Runner:
 
         finally:
             if DEBUG:
+                print("log:")
                 print(self.log)
-                print(str(self.completed.args))
+                if (isinstance(self.completed, str)):
+                    print(self.completed)
+                else:
+                    print("returncode:" + str(self.completed.returncode))
+                    print("args: " + str(self.completed.args))
+                    print("stdout: " + str(self.completed.stdout))
+                    print("stderr: " + str(self.completed.stderr))
             return self.logger()
 
 #If runned as main for testing purposes
@@ -100,7 +107,7 @@ if __name__ == "__main__":
     print("Running runner module testing..")
     DEBUG = True
     #TODO: insert dummy testing software when available
-    TESTARGS = ["test", "arg1", "arg2"]
+    TESTARGS = ["python3.7", "../tests/dummyrun.py"]
     TESTTIME = 1000
     TESTRUNNER = Runner(TESTARGS, TESTTIME)
     TESTRUNNER.run()
