@@ -5,10 +5,11 @@ Dummy program for testing runner
 import sys
 
 def main(args):
-    input = args[0]
-    if input == 1:
-        return 0
+    input = args[1]
+    print("dummy input: " + str(input))
+    if int(input) == 1:
+        sys.exit(0)
     else:
-        return 1
+        sys.exit(7)
 
 main(sys.argv)

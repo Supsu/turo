@@ -29,7 +29,7 @@ class Runner:
         self.args = args
         self.time = time
         self.log = []
-        self.completed = "No program was run!\n"
+        self.completed = "No program was run or exception was raised!\n"
 
     def logger(self):
         """Log method to handle sending logs upwards
@@ -78,6 +78,7 @@ class Runner:
                                         )
 
         except subprocess.CalledProcessError as e:
+            print("Child output:" + str(e.output))
             self.log.append("[NON-0]: " + str(e))
 
         except subprocess.TimeoutExpired as e:
@@ -107,7 +108,7 @@ if __name__ == "__main__":
     print("Running runner module testing..")
     DEBUG = True
     #TODO: insert dummy testing software when available
-    TESTARGS = ["python3.7", "../tests/dummyrun.py"]
+    TESTARGS = ["python3.7", "../tests/dummyrun.py", "1"]
     TESTTIME = 1000
     TESTRUNNER = Runner(TESTARGS, TESTTIME)
     TESTRUNNER.run()
