@@ -9,8 +9,6 @@ class Mutator:
         except TypeError:
             self._initial_input = initial_input
 
-        
-
         if type(self._initial_input) is not bytearray:
             raise TypeError("Mutator expected a bytearray or a string")
 
@@ -42,9 +40,9 @@ if __name__ == "__main__":
     parser.add_argument('file', type=str,
                         help='File to be mutated')
     parser.add_argument('outfile', type=str,
-                        help='Where to save the output')                  
+                        help='Where to save the output')
     parser.add_argument('-N', type=int, default=10,
-                        help='Number of mutations')            
+                        help='Number of mutations')
 
     args = parser.parse_args()
     img_data = load_file(args.file)
@@ -57,6 +55,3 @@ if __name__ == "__main__":
     final_data = mutator.mutate()
     with open(args.outfile, "wb") as f:
         f.write(final_data)
-
-
-    
