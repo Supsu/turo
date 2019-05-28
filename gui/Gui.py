@@ -261,13 +261,19 @@ class Gui(QObject):
         self.log_event(self.current_timestamp(), "Run is not implemented yet")
         
         input_file = self.ti_path.text()
+        mutator_args = self.ti_args.text()
         program_file = self.pr_path.text()
+        program_args = self.pr_args.text()
         config = self.config_data
 
         if len(input_file) > 0 or len(program_file) > 0:
-            self.log_event(self.current_timestamp(), "Starting fuzzer...")
-            self.controller = Controller(input_file, program_file, config)
+            self.log_event(self.current_timestamp(), "Starting...")
+            self.controller = Controller("")
             self.controller.log_event.connect(self.log_event)
+            self.controller.progress_update.connect(self.set_progress)
+            self.controller.run(program_file, program_args, input_file, mutator_args, config)
+            self.controller.log_event.connect(self.log_event)
+
         else:
             self.log_event(self.current_timestamp(), "Failed to start fuzzer: input or program file paths not set.")
 
