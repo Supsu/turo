@@ -46,10 +46,10 @@ class OperationHandler(threading.Thread, QObject):
     def run(self):
         """This function is the main function in the thread"""
 
-        # For testing, just wait 5 seconds.
+        # For testing, run for 10 seconds
         for i in range(0,10):
-            time.sleep(1)
             self.progress_update.emit(i)
+            time.sleep(1)
         self.progress_update.emit(10)
         self.logger.log_event("Program run", True)
 
