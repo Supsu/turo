@@ -16,10 +16,15 @@ class OperationHandler(threading.Thread, QObject):
 
     # Signal for sending event logs upwards
     event_logged = pyqtSignal(int, str)
+<<<<<<< HEAD
     progress_update = pyqtSignal(int)
 
     def __init__(self, input_file, program_path, **kwargs):
         print("Ophandler starting up...")
+=======
+
+    def __init__(self, input_file, program_path, **kwargs):
+>>>>>>> 1b075f4e7a1fd6598c812da6e59efd8de90adc65
         threading.Thread.__init__(self)
         QObject.__init__(self)
         self._input_file = input_file
@@ -45,7 +50,7 @@ class OperationHandler(threading.Thread, QObject):
 
     def run(self):
         """This function is the main function in the thread"""
-
+        
         # For testing, run for 10 seconds
         for i in range(0,10):
             self.progress_update.emit(i)
