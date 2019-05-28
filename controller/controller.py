@@ -1,7 +1,7 @@
 import shlex
 from PyQt5.QtCore import QObject, pyqtSignal, pyqtSlot
 from ..fuzzer.operationhandler import OperationHandler
-from ..gui.Gui import ConfigData
+from ..util.util import ConfigData
 from datetime import datetime
 import time
 

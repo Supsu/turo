@@ -1,27 +1,16 @@
 import os
 
 import copy
-from dataclasses import dataclass
 from datetime import datetime
 import time
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget
 from PyQt5.QtWidgets import QLineEdit, QLabel, QSpacerItem, QPushButton, QTextEdit, QProgressBar, QSpinBox, QCheckBox
 from PyQt5.QtWidgets import QGridLayout, QVBoxLayout, QHBoxLayout
 from PyQt5.QtWidgets import QFileDialog, QDialog
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QObject
 # TODO: Controller needs to be merged
-#from ..fuzzer.controller import controller
-
-"""
-    Config dataclass
-    Contains all the config data sent from the GUI to the actual
-    functional parts of the program
-"""
-@dataclass
-class ConfigData:
-    iterations: int
-    verbose: bool
-    timeout: int
+from ..util.util import ConfigData
+from ..controller.controller import Controller
 
 class Gui(QObject):	
 
@@ -265,8 +254,8 @@ class Gui(QObject):
 
         if len(input_file) > 0 or len(program_file > 0):
             self.log_event(self.current_timestamp(), "Starting fuzzer...")
-            # self.controller = Controller(inpupt_file, program_file, config)
-            # self.controller.log_event.connect(self.log_event)
+            self.controller = Controller(input_file, program_file, config)
+            self.controller.log_event.connect(self.log_event)
         else:
             self.log_event(self.current_timestamp(), "Failed to start fuzzer: input or program file paths not set.")
 
