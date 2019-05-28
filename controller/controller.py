@@ -24,7 +24,7 @@ class Controller(QObject):
 	"""
 	Starts up the entire sequence by creating the event handler
 	"""
-	def run(self, program_path, program_args, input_path, mutator_args, config_data):	
+	def run(self, program_path, input_path, mutator_args, config_data):	
 
 		# Run shlex for args
 		# TODO: Check this later
@@ -33,8 +33,7 @@ class Controller(QObject):
 		epoch = current_timestamp()
 		event = "Starting up handler..."
 		self.log_event.emit(epoch, event)
-		self.operationhandler = OperationHandler(input_path, program_path, verbose=config_data.verbose, timeout=config_data.timeout, iterations=config_data.iterations)
-		# TODO: Remove comments when operation handler actually has these 
+		self.operationhandler = OperationHandler(program_path, input_path, mutator_args, verbose=config_data.verbose, timeout=config_data.timeout, iterations=config_data.iterations)
 		self.operationhandler.event_logged.connect(self.log_received)
 		self.operationhandler.progress_update.connect(self.progress_update_slot)
 

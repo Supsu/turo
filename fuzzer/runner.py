@@ -8,7 +8,7 @@ from PyQt5.QtCore import QObject, pyqtSignal
 DEBUG = False
 
 class Runner(QObject):
-    log_event = pyqtSignal(str) # Can be used to send log events with log_event.emit("event here")
+    log_event = pyqtSignal(str, bool) # Can be used to send log events with log_event.emit("event here")
     """Runner class to handle subprocesses
 
     Runner objects are designed to run the tested program one time,
@@ -50,7 +50,8 @@ class Runner(QObject):
         if len(self.log)==0:
             return 0
         else:
-            #TODO: send log to logger (qt signal?)
+            for logmsg in self.log:
+                self.log_event.emit(logmsg, False)
             return 1
 
     def run(self):
