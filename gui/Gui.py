@@ -70,9 +70,15 @@ class Gui(QObject):
     def create_input_widget(self):
         self.input_widget = QWidget()
         self.pr_path = QLineEdit()
+        self.pr_path.setReadOnly(True)
         self.ti_path = QLineEdit()
+        self.ti_path.setReadOnly(True)
         self.pr_label = QLabel("Program path")
         self.ti_label = QLabel("Input path")
+        self.pr_args = QLineEdit()
+        self.ti_args = QLineEdit()
+        self.pr_args_label = QLabel("Program args")
+        self.ti_args_label = QLabel("Mutator args")
         
         # browse program path button
         self.pr_browse_widget = QWidget()
@@ -82,6 +88,7 @@ class Gui(QObject):
         self.pr_browse_layout.addWidget(self.pr_browse_button)
         self.pr_browse_layout.addSpacerItem(self.pr_browse_spacer)
         self.pr_browse_widget.setLayout(self.pr_browse_layout)
+        self.pr_browse_widget.setMaximumWidth(150)
 
         # browse input file path button
         self.ti_browse_widget = QWidget()
@@ -91,14 +98,19 @@ class Gui(QObject):
         self.ti_browse_layout.addWidget(self.ti_browse_button)
         self.ti_browse_layout.addSpacerItem(self.ti_browse_spacer)
         self.ti_browse_widget.setLayout(self.ti_browse_layout)
+        self.ti_browse_widget.setMaximumWidth(150)
 
         self.input_layout = QGridLayout()
-        self.input_layout.addWidget(self.pr_label, 0, 0)
-        self.input_layout.addWidget(self.pr_path, 1, 0)
-        self.input_layout.addWidget(self.pr_browse_widget, 2, 0)
-        self.input_layout.addWidget(self.ti_label, 0, 1)
-        self.input_layout.addWidget(self.ti_path, 1, 1)
-        self.input_layout.addWidget(self.ti_browse_widget, 2, 1)
+        self.input_layout.addWidget(self.pr_label, 0, 1)
+        self.input_layout.addWidget(self.pr_path, 1, 1)
+        self.input_layout.addWidget(self.pr_browse_button, 1, 0)
+        self.input_layout.addWidget(self.pr_args_label, 0, 2)
+        self.input_layout.addWidget(self.pr_args, 1, 2)
+        self.input_layout.addWidget(self.ti_label, 2, 1)
+        self.input_layout.addWidget(self.ti_path, 3, 1)
+        self.input_layout.addWidget(self.ti_browse_button, 3, 0)
+        self.input_layout.addWidget(self.ti_args_label, 2, 2)
+        self.input_layout.addWidget(self.ti_args, 3, 2)
         self.input_widget.setLayout(self.input_layout)
 
     # Creates the bottom part of the GUI
@@ -252,7 +264,7 @@ class Gui(QObject):
         program_file = self.pr_path.text()
         config = self.config_data
 
-        if len(input_file) > 0 or len(program_file > 0):
+        if len(input_file) > 0 or len(program_file) > 0:
             self.log_event(self.current_timestamp(), "Starting fuzzer...")
             self.controller = Controller(input_file, program_file, config)
             self.controller.log_event.connect(self.log_event)
