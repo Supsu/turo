@@ -20,7 +20,7 @@ class OperationHandler(threading.Thread, QObject):
     progress_update = pyqtSignal(int)
 
     def __init__(self, program_path, input_file, mutator_args, **kwargs):
-        print("Ophandler starting up...")
+        #print("Ophandler starting up...")
         threading.Thread.__init__(self)
         QObject.__init__(self)
         self._input_file = input_file
@@ -52,6 +52,7 @@ class OperationHandler(threading.Thread, QObject):
 
     def run(self):
         """This function is the main function in the thread"""
+        self.logger.log_event("Starting run sequence...", True)
 
         # Parse the input file
         try:

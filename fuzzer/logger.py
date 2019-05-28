@@ -18,7 +18,7 @@ class Logger(QObject):
     event_logged is the signal that is emitted and it sends the timestamp as int and event as str
     """
     def __init__(self, program_name, verbose):
-        print("Logger staring up...")
+        #print("Logger staring up...")
         super(Logger, self).__init__()
         self.verbose = verbose
         self.filename = str(program_name) + ".log"
