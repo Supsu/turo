@@ -1,0 +1,3 @@
+http://google.fi
+8.8.8.8
+tite.fi

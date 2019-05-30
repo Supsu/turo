@@ -62,17 +62,17 @@ class OperationHandler(threading.Thread, QObject):
             self.logger.log_event("Failed to open input file", True)
             self.logger.log_event(error, True)
         
-        inputs = []
+        mutators = []
         for line in f:
-            inputs.append(line.rstrip())
+            mutators.append(Mutator(line))
 
         f.close()
 
         for i in range(0, self.iterations):
             # select input args
             # mutating goes here
-            mut = Mutator(inputs[random.randint(0, len(inputs)-1)])
-            prog_args = str(mut.mutate)
+            mut = random.choice(mutators)
+            prog_args = str(mut.mutate())
 
             args = [self._program_path, prog_args]
             print(args)

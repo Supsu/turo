@@ -348,6 +348,9 @@ class Gui(QObject):
         dt = datetime.now()
         return int(time.mktime(dt.timetuple()))
 
-if __name__ == "__main__":
+def main():
     a = Gui()
     a.create_window()
+
+if __name__ == "__main__":
+    main()
