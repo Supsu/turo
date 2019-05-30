@@ -233,7 +233,7 @@ class Gui(QObject):
         if conf_dialog.result() != QDialog.Accepted:
             self.config_data = copy.deepcopy(config_data_tmp)
         else:
-            self.status_progress.setMaximum = self.config_data.iterations
+            self.status_progress.setMaximum(self.config_data.iterations)
 
     def config_iterations_value_change(self, value):
         self.config_data.iterations = value
@@ -261,7 +261,6 @@ class Gui(QObject):
         input_file = self.ti_path.text()
         program_file = self.pr_path.text()
         config = self.config_data
-        self.status_progress.setMaximum(config.iterations)
 
         if len(input_file) > 0 or len(program_file) > 0:
             self.log_event(self.current_timestamp(), "Starting...")
