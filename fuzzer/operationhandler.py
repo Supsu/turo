@@ -6,6 +6,8 @@ import time
 from PyQt5.QtCore import pyqtSignal, pyqtSlot, QObject
 from ..fuzzer.logger import Logger
 from ..fuzzer.runner import Runner
+from ..fuzzer.mutator import Mutator
+import random
 
 class OperationHandler(threading.Thread, QObject):
     """
@@ -63,15 +65,18 @@ class OperationHandler(threading.Thread, QObject):
         
         inputs = []
         for line in f:
-            inputs.append(line)
+            inputs.append(line.rstrip())
 
         f.close()
 
         for i in range(0, self.iterations):
             # select input args
             # mutating goes here
-            prog_args = inputs[i%len(inputs)]
+            mut = Mutator(inputs[random.randint(0, len(inputs)-1)])
+            prog_args = str(mut.mutate)
+
             args = [self._program_path, prog_args]
+            print(args)
 
             # create runner
             runner = Runner(args, self.timeout)
