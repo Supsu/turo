@@ -1,8 +1,34 @@
 """Mutator takes care of mutating the program inputs. """
 import random
 import argparse
+import string
+
 
 class Mutator:
+
+    # Contains all printable characters for string input fuzzing
+    CHARS = string.printable
+
+    def __init__(self, initial_input, number_of_mutations=10):
+
+        self._initial_input = str(initial_input)
+
+        self._number_of_mutations = number_of_mutations
+        self._mutated = 0
+        self._output = self._initial_input
+
+    def mutate(self):
+        """Changes one byte of the data and returns the result.
+        Also saves the changed data for possible next iteration."""
+
+        output = list(self._output)
+
+        index = random.randint(0, len(output)-1)
+        output[index] = random.choice(self.CHARS)
+        self._output = "".join(output)
+        return self._output
+
+class ByteMutator(Mutator):
     def __init__(self, initial_input, number_of_mutations=10):
         try:
             self._initial_input = bytearray(initial_input, "utf-8")
