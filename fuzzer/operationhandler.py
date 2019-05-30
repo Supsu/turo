@@ -21,13 +21,12 @@ class OperationHandler(threading.Thread, QObject):
     event_logged = pyqtSignal(int, str)
     progress_update = pyqtSignal(int)
 
-    def __init__(self, program_path, input_file, mutator_args, **kwargs):
+    def __init__(self, program_path, input_file, **kwargs):
         #print("Ophandler starting up...")
         threading.Thread.__init__(self)
         QObject.__init__(self)
         self._input_file = input_file
         self._program_path = program_path
-        self._mutator_args = mutator_args
 
         # Get program name
         index_s = self._program_path.rfind('/')

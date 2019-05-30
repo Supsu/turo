@@ -75,10 +75,10 @@ class Gui(QObject):
         self.ti_path.setReadOnly(True)
         self.pr_label = QLabel("Program path")
         self.ti_label = QLabel("Input path")
-        self.pr_args = QLineEdit()
-        self.ti_args = QLineEdit()
-        self.pr_args_label = QLabel("Program args")
-        self.ti_args_label = QLabel("Mutator args")
+        #self.pr_args = QLineEdit()
+        #self.ti_args = QLineEdit()
+        #self.pr_args_label = QLabel("Program args")
+        #self.ti_args_label = QLabel("Mutator args")
         
         # browse program path button
         self.pr_browse_widget = QWidget()
@@ -101,16 +101,16 @@ class Gui(QObject):
         self.ti_browse_widget.setMaximumWidth(150)
 
         self.input_layout = QGridLayout()
-        self.input_layout.addWidget(self.pr_label, 0, 1)
-        self.input_layout.addWidget(self.pr_path, 1, 1)
-        self.input_layout.addWidget(self.pr_browse_button, 1, 0)
-        self.input_layout.addWidget(self.pr_args_label, 0, 2)
-        self.input_layout.addWidget(self.pr_args, 1, 2)
-        self.input_layout.addWidget(self.ti_label, 2, 1)
-        self.input_layout.addWidget(self.ti_path, 3, 1)
-        self.input_layout.addWidget(self.ti_browse_button, 3, 0)
-        self.input_layout.addWidget(self.ti_args_label, 2, 2)
-        self.input_layout.addWidget(self.ti_args, 3, 2)
+        self.input_layout.addWidget(self.pr_label, 0, 0)
+        self.input_layout.addWidget(self.pr_path, 1, 0)
+        self.input_layout.addWidget(self.pr_browse_widget, 2, 0)
+        #self.input_layout.addWidget(self.pr_args_label, 0, 2)
+        #self.input_layout.addWidget(self.pr_args, 1, 2)
+        self.input_layout.addWidget(self.ti_label, 0, 1)
+        self.input_layout.addWidget(self.ti_path, 1, 1)
+        self.input_layout.addWidget(self.ti_browse_widget, 2, 1)
+        #self.input_layout.addWidget(self.ti_args_label, 2, 2)
+        #self.input_layout.addWidget(self.ti_args, 3, 2)
         self.input_widget.setLayout(self.input_layout)
 
     # Creates the bottom part of the GUI
@@ -258,10 +258,7 @@ class Gui(QObject):
 
     # Starts the fuzzer with the current config settings
     def run(self):
-        self.log_event(self.current_timestamp(), "Run is not implemented yet")
-        
         input_file = self.ti_path.text()
-        mutator_args = self.ti_args.text()
         program_file = self.pr_path.text()
         config = self.config_data
 
@@ -270,7 +267,7 @@ class Gui(QObject):
             self.controller = Controller("")
             self.controller.log_event.connect(self.log_event)
             self.controller.progress_update.connect(self.set_progress)
-            self.controller.run(program_file, input_file, mutator_args, config)
+            self.controller.run(program_file, input_file, config)
             self.controller.log_event.connect(self.log_event)
 
         else:
