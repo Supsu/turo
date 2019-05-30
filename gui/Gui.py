@@ -233,7 +233,7 @@ class Gui(QObject):
         if conf_dialog.result() != QDialog.Accepted:
             self.config_data = copy.deepcopy(config_data_tmp)
         else:
-            self.status_progress.setMaximum = self.config_data.iterations
+            self.status_progress.setMaximum(self.config_data.iterations)
 
     def config_iterations_value_change(self, value):
         self.config_data.iterations = value
