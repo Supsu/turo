@@ -18,6 +18,7 @@ class Logger(QObject):
     event_logged is the signal that is emitted and it sends the timestamp as int and event as str
     """
     def __init__(self, program_name, verbose):
+        #print("Logger staring up...")
         super(Logger, self).__init__()
         self.verbose = verbose
         self.filename = str(program_name) + ".log"
@@ -37,7 +38,7 @@ class Logger(QObject):
         dt = datetime.now()
         epoch = int(time.mktime(dt.timetuple()))
 
-        eventstring = "[" + datetime.fromtimestamp(epoch).strftime('%H:%M:%S') + "]: " + event
+        eventstring = "[" + datetime.fromtimestamp(epoch).strftime('%H:%M:%S') + "]: " + event + "\n"
 
         # Write into the file
         f = open(self.filename, "a")

@@ -1,29 +1,21 @@
 import os
 
 import copy
-from dataclasses import dataclass
 from datetime import datetime
 import time
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget
 from PyQt5.QtWidgets import QLineEdit, QLabel, QSpacerItem, QPushButton, QTextEdit, QProgressBar, QSpinBox, QCheckBox
 from PyQt5.QtWidgets import QGridLayout, QVBoxLayout, QHBoxLayout
 from PyQt5.QtWidgets import QFileDialog, QDialog
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QObject
+# TODO: Controller needs to be merged
+from ..util.util import ConfigData
+from ..controller.controller import Controller
 
-"""
-    Config dataclass
-    Contains all the config data sent from the GUI to the actual
-    functional parts of the program
-"""
-@dataclass
-class ConfigData:
-    iterations: int
-    verbose: bool
-    timeout: int
-
-class Gui:	
+class Gui(QObject):	
 
     def __init__(self):
+        super(Gui, self).__init__()
         self.app = None
         self.main_window = None
 
@@ -78,9 +70,15 @@ class Gui:
     def create_input_widget(self):
         self.input_widget = QWidget()
         self.pr_path = QLineEdit()
+        self.pr_path.setReadOnly(True)
         self.ti_path = QLineEdit()
+        self.ti_path.setReadOnly(True)
         self.pr_label = QLabel("Program path")
         self.ti_label = QLabel("Input path")
+        self.pr_args = QLineEdit()
+        self.ti_args = QLineEdit()
+        self.pr_args_label = QLabel("Program args")
+        self.ti_args_label = QLabel("Mutator args")
         
         # browse program path button
         self.pr_browse_widget = QWidget()
@@ -90,6 +88,7 @@ class Gui:
         self.pr_browse_layout.addWidget(self.pr_browse_button)
         self.pr_browse_layout.addSpacerItem(self.pr_browse_spacer)
         self.pr_browse_widget.setLayout(self.pr_browse_layout)
+        self.pr_browse_widget.setMaximumWidth(150)
 
         # browse input file path button
         self.ti_browse_widget = QWidget()
@@ -99,14 +98,19 @@ class Gui:
         self.ti_browse_layout.addWidget(self.ti_browse_button)
         self.ti_browse_layout.addSpacerItem(self.ti_browse_spacer)
         self.ti_browse_widget.setLayout(self.ti_browse_layout)
+        self.ti_browse_widget.setMaximumWidth(150)
 
         self.input_layout = QGridLayout()
-        self.input_layout.addWidget(self.pr_label, 0, 0)
-        self.input_layout.addWidget(self.pr_path, 1, 0)
-        self.input_layout.addWidget(self.pr_browse_widget, 2, 0)
-        self.input_layout.addWidget(self.ti_label, 0, 1)
-        self.input_layout.addWidget(self.ti_path, 1, 1)
-        self.input_layout.addWidget(self.ti_browse_widget, 2, 1)
+        self.input_layout.addWidget(self.pr_label, 0, 1)
+        self.input_layout.addWidget(self.pr_path, 1, 1)
+        self.input_layout.addWidget(self.pr_browse_button, 1, 0)
+        self.input_layout.addWidget(self.pr_args_label, 0, 2)
+        self.input_layout.addWidget(self.pr_args, 1, 2)
+        self.input_layout.addWidget(self.ti_label, 2, 1)
+        self.input_layout.addWidget(self.ti_path, 3, 1)
+        self.input_layout.addWidget(self.ti_browse_button, 3, 0)
+        self.input_layout.addWidget(self.ti_args_label, 2, 2)
+        self.input_layout.addWidget(self.ti_args, 3, 2)
         self.input_widget.setLayout(self.input_layout)
 
     # Creates the bottom part of the GUI
@@ -255,7 +259,22 @@ class Gui:
     # Starts the fuzzer with the current config settings
     def run(self):
         self.log_event(self.current_timestamp(), "Run is not implemented yet")
-        # TODO: Create fuzzer and boot it up
+        
+        input_file = self.ti_path.text()
+        mutator_args = self.ti_args.text()
+        program_file = self.pr_path.text()
+        config = self.config_data
+
+        if len(input_file) > 0 or len(program_file) > 0:
+            self.log_event(self.current_timestamp(), "Starting...")
+            self.controller = Controller("")
+            self.controller.log_event.connect(self.log_event)
+            self.controller.progress_update.connect(self.set_progress)
+            self.controller.run(program_file, input_file, mutator_args, config)
+            self.controller.log_event.connect(self.log_event)
+
+        else:
+            self.log_event(self.current_timestamp(), "Failed to start fuzzer: input or program file paths not set.")
 
     # Stops the fuzzer
     def stop(self):
