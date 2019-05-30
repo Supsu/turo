@@ -261,6 +261,7 @@ class Gui(QObject):
         input_file = self.ti_path.text()
         program_file = self.pr_path.text()
         config = self.config_data
+        self.status_progress.setMaximum(config.iterations)
 
         if len(input_file) > 0 or len(program_file) > 0:
             self.log_event(self.current_timestamp(), "Starting...")
